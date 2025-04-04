@@ -1,0 +1,79 @@
+package com.example.demo.service;
+
+import com.example.demo.mappers.TodoMapper;
+import com.example.demo.model.api.TodoResponseDTO;
+import com.example.demo.model.api.TodoUpdateRequestDTO;
+import com.example.demo.model.domain.Todo;
+import com.example.demo.repository.TodoRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Slf4j
+@Service
+public class TodoService {
+    private final TodoRepository todoRepository;
+    private final TodoMapper todoMapper;
+
+    public TodoService(TodoRepository todoRepository, TodoMapper todoMapper) {
+        this.todoRepository = todoRepository;
+        this.todoMapper = todoMapper;
+    }
+
+    public List<Todo> getAllTodos() {
+        return todoRepository.findAllByOrderByCompletedAscCreatedAtAsc();
+    }
+
+    public Todo getTodoById(UUID id) {
+        return todoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("TODO not found"));
+    }
+
+    public Todo createTodo(Todo todo) {
+        return todoRepository.save(todo);
+    }
+
+
+    public TodoResponseDTO updateTodo(UUID id, TodoUpdateRequestDTO requestDTO){
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("TODO not found"));
+
+        log.info(String.valueOf(requestDTO));
+        if (requestDTO.getTitle() != null) {
+            todo.setTitle(requestDTO.getTitle());
+        }
+        if (requestDTO.getDescription() != null) {
+            todo.setDescription(requestDTO.getDescription());
+        }
+
+        todo.setCompleted(requestDTO.isCompleted());
+
+        if (requestDTO.getDeadline() != null) {
+            todo.setDeadline(requestDTO.getDeadline());
+        }
+        if (requestDTO.getPriority() != null) {
+            todo.setPriority(requestDTO.getPriority());
+        }
+
+        todoRepository.save(todo);
+        return todoMapper.toDto(todo);
+    }
+
+//    public Todo updateTodo(UUID id, Todo todoDetails) {
+//        Todo todo = todoRepository.findById(id).orElse(null);
+//
+//        if (todo != null) {
+//            todo.setTitle(todoDetails.getTitle());
+//            todo.setCompleted(todoDetails.isCompleted());
+//
+//            return todoRepository.save(todo);
+//        }
+//
+//        return null;
+//    }
+
+    public void deleteTodo(UUID id) {
+        todoRepository.deleteById(id);
+    }
+}
