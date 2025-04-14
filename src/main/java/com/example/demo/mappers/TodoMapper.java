@@ -31,12 +31,4 @@ public class TodoMapper {
         dto.setPriority(entity.getPriority());
         return dto;
     }
-
-    public void updateEntityFromDto(TodoRequestDTO dto, Todo entity) {
-        entity.setTitle(dto.getTitle());
-        entity.setDescription(dto.getDescription());
-        entity.setCompleted(dto.isCompleted());
-        entity.setDeadline(dto.getDeadline());
-        entity.setPriority(dto.getPriority());
-    }
 }

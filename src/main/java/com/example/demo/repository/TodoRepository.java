@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, UUID> {
     List<Todo> findAllByOrderByCompletedAscCreatedAtAsc();
+    // Тестировать Spring Data JPA-репозиторий юнит-тестами бессмысленно,
+    // так как его реализация генерируется автоматически.
 }
