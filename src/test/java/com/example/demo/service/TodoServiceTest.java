@@ -28,18 +28,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class TodoServiceTest {
     @Mock
-    private TodoRepository todoRepository; // Мок репозитория
+    private TodoRepository todoRepository;
 
     @Mock
     private TodoMapper mapper;
 
     @InjectMocks
-    private TodoService todoService; // Внедряем мок в сервис
+    private TodoService todoService;
 
     @Test
     @DisplayName("Получение всего списка задач")
     void getAllTodos() {
-        List<Todo> allTodos = todoRepository.findAllByOrderByCompletedAscCreatedAtAsc();
+        List<Todo> allTodos = todoRepository.findAll();
         assertEquals(allTodos, todoService.getAllTodos());
     }
 

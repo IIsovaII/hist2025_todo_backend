@@ -26,7 +26,7 @@ public class TodoService {
     }
 
     public List<Todo> getAllTodos() {
-        return todoRepository.findAllByOrderByCompletedAscCreatedAtAsc();
+        return todoRepository.findAll();
     }
 
     public TodoResponseDTO getTodoById(UUID id) {
@@ -52,10 +52,10 @@ public class TodoService {
         }
 
         todo.setCompleted(requestDTO.isCompleted());
-
-        if (requestDTO.getDeadline() != null) {
+        if (!requestDTO.wasDeadlineSet()) {
             todo.setDeadline(requestDTO.getDeadline());
         }
+
         if (requestDTO.getPriority() != null) {
             todo.setPriority(requestDTO.getPriority());
         }

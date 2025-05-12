@@ -4,6 +4,7 @@ import com.example.demo.model.api.TodoRequestDTO;
 import com.example.demo.model.api.TodoResponseDTO;
 import com.example.demo.model.domain.Todo;
 import com.example.demo.model.enums.TodoPriority;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -14,6 +15,7 @@ class TodoMapperTest {
     private final TodoMapper mapper = new TodoMapper(); // Создаём экземпляр
 
     @Test
+    @DisplayName("Из сущности в дто")
     void toDto() {
         Todo todo = new Todo();
         todo.setTitle("Test");
@@ -33,6 +35,7 @@ class TodoMapperTest {
     }
 
     @Test
+    @DisplayName("Из дто в сущность")
     void toEntity() {
         TodoRequestDTO requestDTO = new TodoRequestDTO();
         requestDTO.setTitle("title");

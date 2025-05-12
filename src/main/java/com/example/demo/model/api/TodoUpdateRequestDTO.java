@@ -15,6 +15,16 @@ public class TodoUpdateRequestDTO {
     private boolean completed;
     @Nullable
     private OffsetDateTime deadline;
+    private boolean deadlineWasSet = false;
+
+    public void setDeadline(OffsetDateTime deadline) {
+        this.deadline = deadline;
+        this.deadlineWasSet = true;
+    }
+    public boolean wasDeadlineSet() {
+        return deadlineWasSet;
+    }
+
     @Nullable
     private TodoPriority priority;
 }
