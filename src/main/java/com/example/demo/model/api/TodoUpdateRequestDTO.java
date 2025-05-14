@@ -23,7 +23,7 @@ public class TodoUpdateRequestDTO {
     }
     public boolean wasDeadlineSet() {
         return deadlineWasSet;
-    }
+    }   
 
     @Nullable
     private TodoPriority priority;

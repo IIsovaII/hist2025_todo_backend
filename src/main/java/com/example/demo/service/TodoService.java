@@ -52,7 +52,9 @@ public class TodoService {
         }
 
         todo.setCompleted(requestDTO.isCompleted());
-        if (!requestDTO.wasDeadlineSet()) {
+
+//        log.info();
+        if (requestDTO.wasDeadlineSet()) {
             todo.setDeadline(requestDTO.getDeadline());
         }
 
@@ -65,6 +67,7 @@ public class TodoService {
     }
 
     public void deleteTodo(UUID id) {
-        todoRepository.deleteById(id);
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("TODO not found"));
+        todoRepository.delete(todo);
     }
 }

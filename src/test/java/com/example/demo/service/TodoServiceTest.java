@@ -4,6 +4,7 @@ import com.example.demo.mappers.TodoMapper;
 import com.example.demo.model.api.TodoRequestDTO;
 import com.example.demo.model.api.TodoResponseDTO;
 import com.example.demo.model.api.TodoUpdateRequestDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -180,11 +181,43 @@ class TodoServiceTest {
         verify(todoRepository).findById(id);
     }
 
+//    @Test
+//    void deleteTodo() {
+//        UUID id = UUID.randomUUID();
+//        todoService.deleteTodo(id);
+//        verify(todoRepository, times(1)).deleteById(id);
+//    }
+
     @Test
-    void deleteTodo() {
-        UUID id = UUID.randomUUID();
+    void deleteTodo_whenTodoExists_shouldDelete() {
+        Todo mockTodo = new Todo();
+        UUID id = mockTodo.getId();
+        mockTodo.setTitle("Test todo");
+        mockTodo.setPriority(TodoPriority.MEDIUM);
+        mockTodo.setDescription("Description");
+        mockTodo.setCompleted(false);
+
+        when(todoRepository.findById(id)).thenReturn(Optional.of(mockTodo));
+
         todoService.deleteTodo(id);
-        verify(todoRepository, times(1)).deleteById(id);
+
+        verify(todoRepository, times(1)).findById(id);
+        verify(todoRepository, times(1)).delete(mockTodo);
+    }
+
+    @Test
+    void deleteTodo_whenTodoNotExists_shouldThrowException() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        when(todoRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(EntityNotFoundException.class, () -> {
+            todoService.deleteTodo(nonExistentId);
+        });
+
+        verify(todoRepository, times(1)).findById(nonExistentId);
+        verify(todoRepository, never()).deleteById(any());
     }
 
 }
